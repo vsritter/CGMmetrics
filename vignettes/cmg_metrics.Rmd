@@ -1,0 +1,49 @@
+---
+title: "cmg_metrics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{cmg_metrics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+library(CGMmetrics)
+
+dt_all <- read_dexcom('raw_clarity_export.csv')
+dt_all$pt
+dt_all$cgm %>% head()
+```
+
+
+```{r}
+gmi = calc_gmi(dt_all$cgm)
+```
+
+
+```{r}
+cgm <- dt_all$cgm %>%
+  dplyr::mutate(
+    date = lubridate::as_date(time),
+    glucose = ifelse(glucose_low == 1, min(glucose, na.rm = T), glucose),
+    glucose = ifelse(glucose_high == 1, max(glucose, na.rm = T), glucose))
+
+dt_cgm_all <- cgm %>% dplyr::mutate(pid = 1)
+
+dt_tir <- tir(dt_cgm_all)
+
+dt_tir
+```
+
+
+```{r fig.width=5}
+plot_tir(dt_tir, months = c(1, 3, 6, 9, 12))
+```
+

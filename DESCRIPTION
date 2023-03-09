@@ -13,4 +13,13 @@ RoxygenNote: 7.2.3
 URL: https://github.com/vsritter/CGMmetrics
 BugReports: https://github.com/vsritter/CGMmetrics/issues
 Imports: 
-    magrittr
+    dplyr,
+    ggplot2,
+    janitor,
+    lubridate,
+    magrittr,
+    tidyr
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
